@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">JoinMe</string>
+    <string name="location_report_text">Report Location</string>
+    <string name="name_input_text">Name</string>
+    <string name="location_input_text">Location</string>
+    <string name="sumbit_button_text">Submit</string>
+    <array name="locations">
+        <item>Information Commons</item>
+        <item>Cudahy Library</item>
+        <item>Damen Student Center</item>
+        <item>Crown Center</item>
+        <item>DeNobili Dining</item>
+        <item>Engrained Cafe</item>
+    </array>
+</resources>
