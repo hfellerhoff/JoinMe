@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -146,8 +147,9 @@ public class MainActivity extends AppCompatActivity implements
     public void signInUser() {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-//              new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build()
+//             ,new AuthUI.IdpConfig.GoogleBuilder().build()
+        );
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -170,6 +172,23 @@ public class MainActivity extends AppCompatActivity implements
                 });
 
         userInfoUpdated = false;
+
+        if (SIGN_IN_REQUIRED)
+            signInUser();
+    }
+
+    public void deleteUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+
+        user.delete();
 
         if (SIGN_IN_REQUIRED)
             signInUser();
