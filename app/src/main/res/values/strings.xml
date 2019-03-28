@@ -16,6 +16,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_friend">Friends</string>
     <string name="title_activity_login">Sign in</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -28,4 +29,15 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings related to ShareFragment -->
+    <string name="button_sign_in">Check In</string>
+    <string name="button_sign_out">Check Out</string>
+
+    <!-- Location Strings -->
+    <array name="locations">
+        <item>Information Commons</item>
+        <item>Damen Student Center</item>
+        <item>Denobili Dining</item>
+    </array>
 </resources>

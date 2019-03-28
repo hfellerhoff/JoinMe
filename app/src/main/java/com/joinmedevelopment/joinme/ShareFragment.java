@@ -7,6 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -28,6 +36,17 @@ public class ShareFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    DatabaseReference databaseLocationReports;
+
+    // UI Elements
+    Button buttonSumbit;
+    Spinner spinnerLocation;
+
+    private boolean locationReportSubmitted = false;
+    private String locationReportID = "";
 
     public ShareFragment() {
         // Required empty public constructor
@@ -58,13 +77,69 @@ public class ShareFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        databaseLocationReports = FirebaseDatabase.getInstance().getReference("location_reports");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_share, container, false);
+
+        buttonSumbit = (Button) view.findViewById(R.id.buttonSubmit);
+        buttonSumbit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLocationReport();
+            }
+        });
+
+        spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_share, container, false);
+        return view;
+    }
+
+    private void updateLocationReport() {
+        if (locationReportSubmitted) {
+            deleteLocationReport();
+        }
+        else {
+            addLocationReport();
+        }
+    }
+
+    private void addLocationReport() {
+        String name = currentUser.getDisplayName();
+        String location = spinnerLocation.getSelectedItem().toString();
+
+        locationReportID = databaseLocationReports.push().getKey();
+
+        LocationReport locationReport = new LocationReport(locationReportID, name, location);
+        databaseLocationReports.child(locationReportID).setValue(locationReport);
+
+        locationReportSubmitted = true;
+        updateUI();
+    }
+
+    private void deleteLocationReport() {
+        databaseLocationReports.child(locationReportID).removeValue();
+        locationReportSubmitted = false;
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        if (locationReportSubmitted) {
+            buttonSumbit.setText(R.string.button_sign_out);
+        }
+        else {
+            buttonSumbit.setText(R.string.button_sign_in);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements
                     return searchFragment;
                 case 1:
                     ShareFragment shareFragment = new ShareFragment();
-                    return shareFragment;
+                        return shareFragment;
                 default:
                     searchFragment = new SearchFragment();
                     return searchFragment;
