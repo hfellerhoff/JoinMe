@@ -1,28 +1,23 @@
 package com.joinmedevelopment.joinme;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +25,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.joinmedevelopment.joinme.dummy.DummyContent;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,24 +38,16 @@ public class MainActivity extends AppCompatActivity implements
 
     private FirebaseAuth mAuth;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    // Used for fragments
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     private static int RC_SIGN_IN = 100;
     private boolean userInfoUpdated = false;
     private final boolean SIGN_IN_REQUIRED = true;
+
+    SearchFragment searchFragment;
+    ShareFragment shareFragment;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -111,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -135,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null)
             signInUser();
+
+        searchFragment = new SearchFragment();
+        shareFragment = new ShareFragment();
     }
 
 
@@ -159,10 +146,14 @@ public class MainActivity extends AppCompatActivity implements
                         .build(),
                 RC_SIGN_IN);
 
+        new UserInformation();
+
         userInfoUpdated = false;
     }
 
     public void signOutUser() {
+        shareFragment.deleteLocationReport();
+
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -175,6 +166,11 @@ public class MainActivity extends AppCompatActivity implements
 
         if (SIGN_IN_REQUIRED)
             signInUser();
+    }
+
+    public boolean userSignedIn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return !(user == null);
     }
 
     public void deleteUser() {
@@ -250,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Function for communicating with SearchFragment
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(LocationReport locationReport) {
 
     }
 
@@ -268,11 +264,11 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-
+            Toast.makeText(this, "TODO: Implement Profile", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_search_preferences) {
-
+            Toast.makeText(this, "TODO: Implement Search Preferences", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-
+            Toast.makeText(this, "TODO: Implement Settings", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_sign_out) {
             signOutUser();
         }
@@ -296,13 +292,13 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    SearchFragment searchFragment = new SearchFragment();
+//                    searchFragment = new SearchFragment();
                     return searchFragment;
                 case 1:
-                    ShareFragment shareFragment = new ShareFragment();
+//                    shareFragment = new ShareFragment();
                         return shareFragment;
                 default:
-                    searchFragment = new SearchFragment();
+//                    searchFragment = new SearchFragment();
                     return searchFragment;
             }
 
@@ -317,4 +313,5 @@ public class MainActivity extends AppCompatActivity implements
             return 2;
         }
     }
+
 }

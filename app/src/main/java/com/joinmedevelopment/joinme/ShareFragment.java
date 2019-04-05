@@ -3,7 +3,10 @@ package com.joinmedevelopment.joinme;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +14,18 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 
 /**
@@ -39,13 +50,14 @@ public class ShareFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
-    DatabaseReference databaseLocationReports;
+    DatabaseReference databaseReports;
+    DatabaseReference databaseUsers;
 
     // UI Elements
-    Button buttonSumbit;
+    Button buttonSubmit;
     Spinner spinnerLocation;
 
-    private boolean locationReportSubmitted = false;
+    public boolean locationReportSubmitted;
     private String locationReportID = "";
 
     public ShareFragment() {
@@ -81,7 +93,24 @@ public class ShareFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        databaseLocationReports = FirebaseDatabase.getInstance().getReference("location_reports");
+        databaseReports = FirebaseDatabase.getInstance().getReference("reports");
+        databaseUsers = FirebaseDatabase.getInstance().getReference("users");
+
+        // Update submit button UI based on if report has been submitted
+        databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HashMap<String, Object> hashMap = (HashMap)dataSnapshot.child(currentUser.getUid()).getValue();
+                locationReportSubmitted = (Boolean)hashMap.get("reportSubmitted");
+                Log.i("report", ((Boolean)locationReportSubmitted).toString());
+                updateUI();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -90,13 +119,14 @@ public class ShareFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_share, container, false);
 
-        buttonSumbit = (Button) view.findViewById(R.id.buttonSubmit);
-        buttonSumbit.setOnClickListener(new View.OnClickListener() {
+        buttonSubmit = (Button) view.findViewById(R.id.buttonSubmit);
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateLocationReport();
             }
         });
+        updateUI();
 
         spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
 
@@ -117,28 +147,35 @@ public class ShareFragment extends Fragment {
         String name = currentUser.getDisplayName();
         String location = spinnerLocation.getSelectedItem().toString();
 
-        locationReportID = databaseLocationReports.push().getKey();
+        locationReportID = databaseReports.push().getKey();
 
-        LocationReport locationReport = new LocationReport(locationReportID, name, location);
-        databaseLocationReports.child(locationReportID).setValue(locationReport);
+        new LocationReport(locationReportID, name, location);
 
         locationReportSubmitted = true;
         updateUI();
     }
 
-    private void deleteLocationReport() {
-        databaseLocationReports.child(locationReportID).removeValue();
-        locationReportSubmitted = false;
+    public void deleteLocationReport() {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        if (locationReportSubmitted) {
+
+            databaseReports.child(currentUser.getUid()).removeValue();
+        }
+
+        databaseUsers.child(currentUser.getUid()).child("reportSubmitted").setValue(false);
+        databaseUsers.child(currentUser.getUid()).child("reportID").setValue(null);
+
+        locationReportSubmitted = false;
         updateUI();
     }
 
     private void updateUI() {
         if (locationReportSubmitted) {
-            buttonSumbit.setText(R.string.button_sign_out);
+            buttonSubmit.setText(R.string.button_check_out);
         }
         else {
-            buttonSumbit.setText(R.string.button_sign_in);
+            buttonSubmit.setText(R.string.button_check_in);
         }
     }
 
@@ -166,18 +203,12 @@ public class ShareFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setLocationReportSubmitted(boolean locationReportSubmitted) {
+        this.locationReportSubmitted = locationReportSubmitted;
     }
 }
