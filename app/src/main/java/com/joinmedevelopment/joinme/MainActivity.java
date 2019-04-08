@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null)
             signInUser();
+        else
+            initializeUser();
 
         searchFragment = new SearchFragment();
         shareFragment = new ShareFragment();
@@ -146,9 +149,7 @@ public class MainActivity extends AppCompatActivity implements
                         .build(),
                 RC_SIGN_IN);
 
-        new UserInformation();
-
-        userInfoUpdated = false;
+        initializeUser();
     }
 
     public void signOutUser() {
@@ -166,6 +167,13 @@ public class MainActivity extends AppCompatActivity implements
 
         if (SIGN_IN_REQUIRED)
             signInUser();
+    }
+
+    public void initializeUser() {
+        UserInformation userInformation = new UserInformation();
+        userInformation.addFriend("MURJAEHJAnNnYRtH8hAn5UigPPx1", false);
+
+        userInfoUpdated = false;
     }
 
     public boolean userSignedIn() {
