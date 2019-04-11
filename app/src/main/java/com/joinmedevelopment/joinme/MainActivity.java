@@ -183,11 +183,13 @@ public class MainActivity extends AppCompatActivity implements
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
+                if (dataSnapshot.getValue(UserInformation.class) != null) {
                     setUserInformation(dataSnapshot.getValue(UserInformation.class));
                 }
                 else {
-                    setUserInformation(new UserInformation());
+                    UserInformation userInformation = new UserInformation();
+                    setUserInformation(userInformation);
+                    userInformation.updateUserInformation();
                 }
             }
 
