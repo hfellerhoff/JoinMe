@@ -103,8 +103,13 @@ public class ShareFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     HashMap<String, Object> hashMap = (HashMap)dataSnapshot.child(currentUser.getUid()).getValue();
-                    locationReportSubmitted = (Boolean)hashMap.get("reportSubmitted");
-                    Log.i("report", ((Boolean)locationReportSubmitted).toString());
+                    if (hashMap != null) {
+                        locationReportSubmitted = (Boolean)hashMap.get("reportSubmitted");
+                    }
+                    else {
+                        locationReportSubmitted = false;
+                    }
+
                     updateUI();
                 }
 
