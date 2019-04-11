@@ -31,8 +31,8 @@
     </string>
 
     <!-- Strings related to ShareFragment -->
-    <string name="button_sign_in">Check In</string>
-    <string name="button_sign_out">Check Out</string>
+    <string name="button_check_in">Check In</string>
+    <string name="button_check_out">Check Out</string>
 
     <!-- Location Strings -->
     <array name="locations">
