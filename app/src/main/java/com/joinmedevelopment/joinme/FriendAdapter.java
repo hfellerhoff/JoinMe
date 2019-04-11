@@ -79,7 +79,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         final boolean isFriend = f.isFriend();
 
-        friendViewHolder.textViewFriendName.setText(f.getName());
+        if (f.getName() == null)
+            friendViewHolder.textViewFriendName.setText(f.getId());
+        else
+            friendViewHolder.textViewFriendName.setText(f.getName());
 
         if (isFriend)
             friendViewHolder.buttonConfirmFriend.setText("Remove");

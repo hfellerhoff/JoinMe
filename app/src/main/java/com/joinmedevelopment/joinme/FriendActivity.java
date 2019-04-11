@@ -97,7 +97,7 @@ public class FriendActivity extends AppCompatActivity {
 
                             String currentUserID = FirebaseAuth.getInstance().getUid();
 
-                            if (userFriends.containsKey(currentUserID)) {
+                            if (userFriends.containsKey(currentUserID) && editTextEntry.equals(potentialFriend.getEmail())) {
                                 Toast.makeText(getBaseContext(), "ERROR: Friend already added", Toast.LENGTH_SHORT).show();
                                 emailFound = true;
                                 break;
