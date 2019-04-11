@@ -55,7 +55,7 @@ public class ShareFragment extends Fragment {
 
     // UI Elements
     Button buttonSubmit;
-    Spinner spinnerLocation;
+    Spinner spinnerWhere;
 
     public boolean locationReportSubmitted;
     private String locationReportID = "";
@@ -131,7 +131,7 @@ public class ShareFragment extends Fragment {
         });
         updateUI();
 
-        spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
+        spinnerWhere = (Spinner) view.findViewById(R.id.spinnerWhere);
 
         // Inflate the layout for this fragment
         return view;
@@ -148,7 +148,7 @@ public class ShareFragment extends Fragment {
 
     private void addLocationReport() {
         String name = currentUser.getDisplayName();
-        String location = spinnerLocation.getSelectedItem().toString();
+        String location = spinnerWhere.getSelectedItem().toString();
 
         locationReportID = databaseReports.push().getKey();
 
