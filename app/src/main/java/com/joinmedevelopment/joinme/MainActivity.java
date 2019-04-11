@@ -28,11 +28,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static int RC_SIGN_IN = 100;
     private boolean userInfoUpdated = false;
-    private final boolean SIGN_IN_REQUIRED = true;
-
-    private UserInformation userInformation;
+    private final boolean SIGN_IN_REQUIRED = false;
 
     SearchFragment searchFragment;
     ShareFragment shareFragment;
@@ -128,7 +121,10 @@ public class MainActivity extends AppCompatActivity implements
         if (currentUser == null)
             signInUser();
         else
-            initializeApp();
+            initializeUser();
+
+        searchFragment = new SearchFragment();
+        shareFragment = new ShareFragment();
     }
 
 
@@ -153,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements
                         .build(),
                 RC_SIGN_IN);
 
-        initializeApp();
+        initializeUser();
     }
 
     public void signOutUser() {
@@ -173,36 +169,11 @@ public class MainActivity extends AppCompatActivity implements
             signInUser();
     }
 
-    public void initializeApp() {
-        initializeUser();
-        initializeFragments();
-    }
-
     public void initializeUser() {
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid());
-        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    setUserInformation(dataSnapshot.getValue(UserInformation.class));
-                }
-                else {
-                    setUserInformation(new UserInformation());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        UserInformation userInformation = new UserInformation();
+        //userInformation.addFriend("MURJAEHJAnNnYRtH8hAn5UigPPx1", false);
 
         userInfoUpdated = false;
-    }
-
-    public void initializeFragments() {
-        searchFragment = new SearchFragment();
-        shareFragment = new ShareFragment();
     }
 
     public boolean userSignedIn() {
@@ -302,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements
 
         if (id == R.id.nav_profile) {
             Toast.makeText(this, "TODO: Implement Profile", Toast.LENGTH_SHORT).show();
-            userInformation.addFriend("MURJAEHJAnNnYRtH8hAn5UigPPx1", false);
         } else if (id == R.id.nav_search_preferences) {
             Toast.makeText(this, "TODO: Implement Search Preferences", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
@@ -350,10 +320,6 @@ public class MainActivity extends AppCompatActivity implements
             // Show 2 total pages.
             return 2;
         }
-    }
-
-    private void setUserInformation(UserInformation userInformation) {
-        this.userInformation = userInformation;
     }
 
 }
