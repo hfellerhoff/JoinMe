@@ -2,11 +2,13 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FriendActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -20,14 +22,36 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_friend" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_location_reports"
+        android:name="com.joinmedevelopment.joinme.FriendActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:background="@color/browser_actions_bg_grey"
+        android:paddingBottom="@dimen/friend_item_height"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".FriendActivity"
+        tools:listitem="@layout/friend_list_item">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    </android.support.v7.widget.RecyclerView>
+
+    <EditText
+        android:id="@+id/editTextFriendEmail"
+        android:layout_width="314dp"
+        android:layout_height="@dimen/friend_item_height"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="@string/fui_email_hint"
+        android:layout_gravity="start|bottom" />
+
+    <Button
+        android:id="@+id/buttonAddFriend"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_group_add_white_24dp" />
+        android:layout_height="@dimen/friend_item_height"
+        android:layout_gravity="end|bottom"
+        android:text="Add" />
 
 </android.support.design.widget.CoordinatorLayout>

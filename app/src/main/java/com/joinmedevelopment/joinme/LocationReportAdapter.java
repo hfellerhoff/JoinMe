@@ -3,21 +3,13 @@ package com.joinmedevelopment.joinme;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAdapter.LocationReportViewHolder>{
 
@@ -33,7 +25,7 @@ public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAd
         LocationReportViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cardView);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewName);
+            textViewName = (TextView) itemView.findViewById(R.id.textViewFriendName);
             textViewLocation = (TextView) itemView.findViewById(R.id.textViewLocation);
             textViewTime = (TextView) itemView.findViewById(R.id.textViewTime);
         }

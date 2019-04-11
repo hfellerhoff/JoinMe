@@ -1,12 +1,18 @@
 package com.joinmedevelopment.joinme;
 
+import android.support.annotation.NonNull;
+
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserInformation {
 
@@ -16,12 +22,17 @@ public class UserInformation {
     private String userID;
     private String name;
     private String email;
-    private ArrayList<String> friendIDList;
     private boolean reportSubmitted;
     private String reportID;
 
+    private HashMap<String, Friend> friends;
+
     public UserInformation() {
         this(false, null);
+    }
+
+    public UserInformation(UserInformation userInformation) {
+        this(userInformation.reportSubmitted, userInformation.reportID);
     }
 
     public UserInformation(boolean reportSubmitted, String reportID) {
@@ -31,12 +42,12 @@ public class UserInformation {
         this.userID = user.getUid();
         this.name = user.getDisplayName();
         this.email = user.getEmail();
-        this.friendIDList = new ArrayList<String>();
+        this.friends = new HashMap<String, Friend>();
         this.reportSubmitted = reportSubmitted;
         this.reportID = reportID;
-
-        updateUserInformation();
     }
+
+
 
     public String getUserID() {
         return userID;
@@ -50,8 +61,8 @@ public class UserInformation {
         return email;
     }
 
-    public ArrayList<String> getFriendIDList() {
-        return friendIDList;
+    public HashMap<String, Friend> getFriends() {
+        return friends;
     }
 
     public boolean isReportSubmitted() {
@@ -76,7 +87,17 @@ public class UserInformation {
         updateUserInformation();
     }
 
+    public void addFriend(String friendID, boolean isFriend) {
+        friends.put(friendID, new Friend(friendID, isFriend, userID));
+        updateUserInformation();
+    }
+
     public void updateUserInformation() {
         databaseUsers.child(userID).setValue(this);
+    }
+
+    @Override
+    public String toString() {
+        return name + ", " + email;
     }
 }

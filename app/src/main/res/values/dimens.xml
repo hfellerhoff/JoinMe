@@ -8,4 +8,5 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">96dp</dimen>
     <dimen name="spinner_height">64dp</dimen>
+    <dimen name="friend_item_height">48sp</dimen>
 </resources>

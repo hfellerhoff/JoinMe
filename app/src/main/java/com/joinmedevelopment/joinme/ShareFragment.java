@@ -97,20 +97,23 @@ public class ShareFragment extends Fragment {
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
         // Update submit button UI based on if report has been submitted
-        databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                HashMap<String, Object> hashMap = (HashMap)dataSnapshot.child(currentUser.getUid()).getValue();
-                locationReportSubmitted = (Boolean)hashMap.get("reportSubmitted");
-                Log.i("report", ((Boolean)locationReportSubmitted).toString());
-                updateUI();
-            }
+        if (currentUser != null) {
+            databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    HashMap<String, Object> hashMap = (HashMap)dataSnapshot.child(currentUser.getUid()).getValue();
+                    locationReportSubmitted = (Boolean)hashMap.get("reportSubmitted");
+                    Log.i("report", ((Boolean)locationReportSubmitted).toString());
+                    updateUI();
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -159,12 +162,10 @@ public class ShareFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (locationReportSubmitted) {
-
             databaseReports.child(currentUser.getUid()).removeValue();
+            databaseUsers.child(currentUser.getUid()).child("reportSubmitted").setValue(false);
+            databaseUsers.child(currentUser.getUid()).child("reportID").setValue(null);
         }
-
-        databaseUsers.child(currentUser.getUid()).child("reportSubmitted").setValue(false);
-        databaseUsers.child(currentUser.getUid()).child("reportID").setValue(null);
 
         locationReportSubmitted = false;
         updateUI();
