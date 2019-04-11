@@ -3,48 +3,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="16dp"
+    android:layout_height="match_parent"
     android:paddingLeft="16dp"
+    android:paddingTop="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="0dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            >
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/textViewFriendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:textSize="20sp"
+                android:height="36sp"
+                android:gravity="center"
+                android:textSize="24sp"
                 tools:text="Full Name" />
 
-            <TextView
-                android:id="@+id/textViewLocation"
+            <!--<TextView
+                android:id="@+id/textViewFriendEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewFriendName"
-                tools:text="Location" />
+                android:layout_alignTop="@+id/textViewFriendName"
+                android:layout_marginTop="35dp"
+                android:height="24sp"
+                android:gravity="start"
+                android:textSize="18sp"
+                tools:text="emailaddress@example.com" />-->
 
-            <TextView
-                android:id="@+id/textViewTime"
+            <Button
+                android:id="@+id/buttonConfirmFriend"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewLocation"
-                android:text="Some Time Ago"
-                android:textSize="12sp" />
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:height="@dimen/friend_item_height"
+                android:text="ERROR" />
 
         </RelativeLayout>
 

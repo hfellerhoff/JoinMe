@@ -2,18 +2,22 @@ package com.joinmedevelopment.joinme;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.joinmedevelopment.joinme.dummy.DummyContent;
-import com.joinmedevelopment.joinme.dummy.DummyContent.DummyItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -28,6 +32,14 @@ public class SearchFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    DatabaseReference databaseReports;
+    ArrayList<LocationReport> reportList;
+
+    private View view;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,22 +70,35 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search_list, container, false);
+        view = inflater.inflate(R.layout.fragment_search, container, false);
+        recyclerView = (RecyclerView)view.findViewById(R.id.list_location_reports);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        reportList = new ArrayList<LocationReport>();
+
+        databaseReports = FirebaseDatabase.getInstance().getReference("reports");
+        databaseReports.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                reportList.clear();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LocationReport report = snapshot.getValue(LocationReport.class);
+                    reportList.add(report);
+
+                }
+
+                adapter = new LocationReportAdapter(reportList);
+                recyclerView.setAdapter(adapter);
             }
-            recyclerView.setAdapter(new MySearchRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -104,6 +129,6 @@ public class SearchFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(LocationReport locationReport);
     }
 }
