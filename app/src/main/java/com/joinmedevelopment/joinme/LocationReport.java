@@ -19,9 +19,11 @@ public class LocationReport {
     }
 
     public LocationReport(String reportID, String name, String location) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        this(FirebaseAuth.getInstance().getUid(), reportID, name, location);
+    }
 
-        this.userID = currentUser.getUid();
+    public LocationReport(String userID, String reportID, String name, String location) {
+        this.userID = userID;
         this.reportID = reportID;
         this.name = name;
         this.location = location;

@@ -11,13 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A fragment representing a list of Items.
@@ -76,6 +79,25 @@ public class SearchFragment extends Fragment {
         reportList = new ArrayList<LocationReport>();
 
         databaseReports = FirebaseDatabase.getInstance().getReference("reports");
+        DatabaseReference databaseFriends = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid() + "/friends");
+
+        final GenericTypeIndicator<HashMap<String, Friend>> typeIndicator = new GenericTypeIndicator<HashMap<String, Friend>>() {};
+        final HashMap<String, Friend> friendsMap = new HashMap<>();
+
+        databaseFriends.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HashMap<String, Friend> tempMap = dataSnapshot.getValue(typeIndicator);
+                if (tempMap != null)
+                    friendsMap.putAll(tempMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         databaseReports.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -83,8 +105,16 @@ public class SearchFragment extends Fragment {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     LocationReport report = snapshot.getValue(LocationReport.class);
-                    reportList.add(report);
 
+                    boolean addReport = false;
+
+                    for (Friend friend : friendsMap.values()) {
+                        if (friend.isFriend() && friend.getId().equals(report.getUserID()))
+                            addReport = true;
+                    }
+
+                    if (addReport)
+                        reportList.add(report);
                 }
 
                 adapter = new LocationReportAdapter(reportList);
