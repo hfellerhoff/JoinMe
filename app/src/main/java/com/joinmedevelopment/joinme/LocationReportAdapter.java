@@ -8,8 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAdapter.LocationReportViewHolder>{
 
@@ -45,10 +54,11 @@ public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LocationReportViewHolder locationReportViewHolder, int i) {
-        locationReportViewHolder.textViewName.setText(reports.get(i).getName());
-        locationReportViewHolder.textViewLocation.setText(reports.get(i).getLocation());
-        locationReportViewHolder.textViewTime.setText(getTimePassed(reports.get(i).getTimeCreated()));
+    public void onBindViewHolder(@NonNull final LocationReportViewHolder locationReportViewHolder, final int i) {
+        LocationReport report = reports.get(i);
+        locationReportViewHolder.textViewName.setText(report.getName());
+        locationReportViewHolder.textViewLocation.setText(report.getLocation());
+        locationReportViewHolder.textViewTime.setText(getTimePassed(report.getTimeCreated()));
     }
 
     @Override

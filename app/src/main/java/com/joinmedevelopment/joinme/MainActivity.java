@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void signOutUser() {
-        shareFragment.deleteLocationReport();
+        //shareFragment.deleteLocationReport();
 
         AuthUI.getInstance()
                 .signOut(this)
@@ -187,9 +187,13 @@ public class MainActivity extends AppCompatActivity implements
                     setUserInformation(dataSnapshot.getValue(UserInformation.class));
                 }
                 else {
-                    UserInformation userInformation = new UserInformation();
-                    setUserInformation(userInformation);
-                    userInformation.updateUserInformation();
+                    if (FirebaseAuth.getInstance().getCurrentUser() == null)
+                        changeActivity(MainActivity.class);
+                    else {
+                        UserInformation userInformation = new UserInformation();
+                        setUserInformation(userInformation);
+                        userInformation.updateUserInformation();
+                    }
                 }
             }
 
@@ -302,8 +306,12 @@ public class MainActivity extends AppCompatActivity implements
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_test_app) {
-            Toast.makeText(this, "TODO: Implement Test", Toast.LENGTH_SHORT).show();
+        if (id == R.id.nav_test_app_1) {
+            testApp(1);
+        } else if (id == R.id.nav_test_app_2) {
+            testApp(2);
+        } else if (id == R.id.nav_test_app_3) {
+            testApp(3);
         } else if (id == R.id.nav_sign_out) {
             signOutUser();
         }
@@ -351,6 +359,30 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setUserInformation(UserInformation userInformation) {
         this.userInformation = userInformation;
+    }
+
+    private void testApp(int testNumber) {
+        if (testNumber == 1) {
+            new Friend("JDHFH38RH3H745", "John Smith", true, userInformation.getUserID());
+            new UserInformation("JDHFH38RH3H745", "John Smith", "johnsmith@luc.edu", false, null);
+            new LocationReport("JDHFH38RH3H745", "JAHSEUWFUWERN", "John Smith", "Information Commons");
+            Toast.makeText(this, "User \"John Smith\" added.", Toast.LENGTH_SHORT).show();
+        }
+        else if (testNumber == 2){
+            new Friend("ASDHF8ERH2UHA2", "Allison Brown", true, userInformation.getUserID());
+            new UserInformation("ASDHF8ERH2UHA2", "Allison Brown", "allisonbrown@luc.edu", false, null);
+            new LocationReport("ASDHF8ERH2UHA2", "JHWHUEH34AJSD", "Allison Brown", "Cudahy Library");
+            Toast.makeText(this, "User \"Allison Brown\" added.", Toast.LENGTH_SHORT).show();
+        }
+        else if (testNumber == 3) {
+            new Friend("COMP271ISGREAT", "Mark Albert", true, userInformation.getUserID());
+            new UserInformation("COMP271ISGREAT", "Mark Albert", "mva@cs.luc.edu", false, null);
+            new LocationReport("COMP271ISGREAT", "COMP271AWYEAH", "Mark Albert", "Cudahy Library");
+            Toast.makeText(this, "User \"Mark Albert\" added.", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(this, "All test users already added.", Toast.LENGTH_SHORT).show();
+
     }
 
 }

@@ -47,6 +47,15 @@ public class UserInformation {
         this.reportID = reportID;
     }
 
+    public UserInformation(String userID, String name, String email, boolean reportSubmitted, String reportID) {
+        this.userID = userID;
+        this.name = name;
+        this.email = email;
+        this.friends = new HashMap<String, Friend>();
+        this.reportSubmitted = reportSubmitted;
+        this.reportID = reportID;
+    }
+
 
 
     public String getUserID() {
