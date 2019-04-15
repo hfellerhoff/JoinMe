@@ -36,24 +36,22 @@
 
     <!-- Location Strings -->
     <array name="locations">
-        <item>Information Commons</item>
-        <item>Damen Student Center</item>
-        <item>Denobili Dining</item>
-        <item>Cuneo Hall</item>
-        <item>Dumbach Hall</item>
-        <item>Halas Sports Center</item>
         <item>Crown Center</item>
         <item>Cudahy Library</item>
+        <item>Cuneo Hall</item>
+        <item>Damen Student Center</item>
         <item>DeNobili Dining</item>
-        <item>Wellness Center</item>
-        <item>Granville CTA</item>
-        <item>Loyola CTA</item>
-        <item>Santa Clara Hall</item>
-        <item>Bookstore</item>
+        <item>Dumbach Hall</item>
         <item>East Quad</item>
-        <item>West Quad</item>
-        <item>Quinlan Life Sciences Center </item>
-        <item>Mundelein Center</item>
         <item>Gentile Arena</item>
+        <item>Halas Sports Center</item>
+        <item>Information Commons</item>
+        <item>Mundelein Center</item>
+        <item>Quinlan Life Sciences Center</item>
+        <item>Red Line - Granville</item>
+        <item>Red Line - Loyola</item>
+        <item>Santa Clara Hall</item>
+        <item>Wellness Center</item>
+        <item>West Quad</item>
     </array>
 </resources>

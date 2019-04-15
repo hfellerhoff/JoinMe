@@ -45,6 +45,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private boolean sortByFriends = true;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -109,10 +111,18 @@ public class SearchFragment extends Fragment {
 
                     boolean addReport = false;
 
-                    for (Friend friend : friendsMap.values()) {
-                        if (friend.isFriend() && friend.getId().equals(report.getUserID()))
-                            addReport = true;
+                    if (sortByFriends) {
+                        for (Friend friend : friendsMap.values()) {
+                            if (friend.isFriend() && friend.getId().equals(report.getUserID()))
+                                addReport = true;
+                        }
                     }
+                    else if (report.getUserID() != null)
+                        if (report.getUserID().equals(FirebaseAuth.getInstance().getUid()))
+                            addReport = false;
+                    else
+                        addReport = true;
+
 
                     if (addReport)
                         reportList.add(report);
@@ -166,5 +176,11 @@ public class SearchFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(LocationReport locationReport);
+    }
+
+    public Boolean isSortByFriends() {return sortByFriends;}
+
+    public void setSortByFriends(boolean sortByFriends) {
+        this.sortByFriends = sortByFriends;
     }
 }

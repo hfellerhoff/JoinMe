@@ -186,16 +186,18 @@ public class ShareFragment extends Fragment {
             databaseReports.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String location = dataSnapshot.getValue(LocationReport.class).getLocation();
-                    String[] locations = getResources().getStringArray(R.array.locations);
+                    if (dataSnapshot.getValue(LocationReport.class) != null) {
+                        String location = dataSnapshot.getValue(LocationReport.class).getLocation();
+                        String[] locations = getResources().getStringArray(R.array.locations);
 
-                    int i = 0;
-                    for (String arrayLocation : locations) {
-                        if (location.equals(arrayLocation))
-                            spinnerWhere.setSelection(i);
-                        else
-                            i++;
+                        int i = 0;
+                        for (String arrayLocation : locations) {
+                            if (location.equals(arrayLocation))
+                                spinnerWhere.setSelection(i);
+                            else
+                                i++;
 
+                        }
                     }
                 }
 

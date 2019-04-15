@@ -308,6 +308,16 @@ public class MainActivity extends AppCompatActivity implements
             testApp(2);
         } else if (id == R.id.nav_test_app_3) {
             testApp(3);
+        } else if (id == R.id.nav_delete_test_users) {
+            testApp(0);
+        } else if (id == R.id.nav_sort_all) {
+            searchFragment.setSortByFriends(false);
+            Toast.makeText(this, "Displaying location reports from ALL", Toast.LENGTH_SHORT).show();
+            updateLocationReportDisplay();
+        } else if (id == R.id.nav_sort_friends) {
+            searchFragment.setSortByFriends(true);
+            Toast.makeText(this, "Displaying location reports from FRIENDS", Toast.LENGTH_SHORT).show();
+            updateLocationReportDisplay();
         } else if (id == R.id.nav_sign_out) {
             signOutUser();
         }
@@ -358,27 +368,74 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void testApp(int testNumber) {
-        if (testNumber == 1) {
-            new Friend("JDHFH38RH3H745", "John Smith", true, userInformation.getUserID());
-            new UserInformation("JDHFH38RH3H745", "John Smith", "johnsmith@luc.edu", false, null);
-            new LocationReport("JDHFH38RH3H745", "JAHSEUWFUWERN", "John Smith", "Information Commons");
-            Toast.makeText(this, "User \"John Smith\" added.", Toast.LENGTH_SHORT).show();
+        String testUserOneUserID = "JDHFH38RH3H745";
+        String testUserOneName = "John Smith";
+        String testUserOneReportID = "JAHSEUWFUWERN";
+        String testUserOneEmail = testUserOneName.trim().toLowerCase() + "@luc.edu";
+        String testUserOneLocation = "Information Commons";
+
+        String testUserTwoUserID = "ASDHF8ERH2UHA2";
+        String testUserTwoName = "Allison Brown";
+        String testUserTwoReportID = "JHWHUEH34AJSD";
+        String testUserTwoEmail = testUserTwoName.trim().toLowerCase() + "@luc.edu";
+        String testUserTwoLocation = "Cudahy Library";
+
+        String testUserThreeUserID = "COMP271ISGREAT";
+        String testUserThreeName = "Mark Albert";
+        String testUserThreeReportID = "COMP271AWYEAH";
+        String testUserThreeEmail = "mva@cs.luc.edu";
+        String testUserThreeLocation = "Crown Center";
+
+        if (testNumber == 0) {
+            DatabaseReference databaseReports = FirebaseDatabase.getInstance().getReference("reports");
+            DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference("users");
+
+            databaseReports.child(testUserOneUserID).setValue(null);
+            databaseReports.child(testUserTwoUserID).setValue(null);
+            databaseReports.child(testUserThreeUserID).setValue(null);
+
+            databaseUsers.child(testUserOneUserID).setValue(null);
+            databaseUsers.child(testUserTwoUserID).setValue(null);
+            databaseUsers.child(testUserThreeUserID).setValue(null);
+
+            databaseUsers = databaseUsers.child(FirebaseAuth.getInstance().getUid() + "/friends");
+            databaseUsers.child(testUserOneUserID).setValue(null);
+            databaseUsers.child(testUserTwoUserID).setValue(null);
+            databaseUsers.child(testUserThreeUserID).setValue(null);
+
+            updateLocationReportDisplay();
+        }
+        else if (testNumber == 1) {
+            new Friend(testUserOneUserID, testUserOneName, true, userInformation.getUserID());
+            new UserInformation(testUserOneUserID, testUserOneName, testUserOneEmail, false, null);
+            new LocationReport(testUserOneUserID, testUserOneReportID, testUserOneName, testUserOneLocation);
+            Toast.makeText(this, "User \"" + testUserOneName + "\" added.", Toast.LENGTH_SHORT).show();
+            updateLocationReportDisplay();
         }
         else if (testNumber == 2){
-            new Friend("ASDHF8ERH2UHA2", "Allison Brown", true, userInformation.getUserID());
-            new UserInformation("ASDHF8ERH2UHA2", "Allison Brown", "allisonbrown@luc.edu", false, null);
-            new LocationReport("ASDHF8ERH2UHA2", "JHWHUEH34AJSD", "Allison Brown", "Cudahy Library");
-            Toast.makeText(this, "User \"Allison Brown\" added.", Toast.LENGTH_SHORT).show();
+            new Friend(testUserTwoUserID, testUserTwoName, true, userInformation.getUserID());
+            new UserInformation(testUserTwoUserID, testUserTwoName, testUserTwoEmail, false, null);
+            new LocationReport(testUserTwoUserID, testUserTwoReportID, testUserTwoName, testUserTwoLocation);
+            Toast.makeText(this, "User \"" + testUserTwoName + "\" added.", Toast.LENGTH_SHORT).show();
+            updateLocationReportDisplay();
         }
         else if (testNumber == 3) {
-            new Friend("COMP271ISGREAT", "Mark Albert", true, userInformation.getUserID());
-            new UserInformation("COMP271ISGREAT", "Mark Albert", "mva@cs.luc.edu", false, null);
-            new LocationReport("COMP271ISGREAT", "COMP271AWYEAH", "Mark Albert", "Cudahy Library");
-            Toast.makeText(this, "User \"Mark Albert\" added.", Toast.LENGTH_SHORT).show();
+            new Friend(testUserThreeUserID, testUserThreeName, true, userInformation.getUserID());
+            new UserInformation(testUserThreeUserID, testUserThreeName, testUserThreeEmail, false, null);
+            new LocationReport(testUserThreeUserID, testUserThreeReportID, testUserThreeName, testUserThreeLocation);
+            Toast.makeText(this, "User \"" + testUserThreeName + "\" added.", Toast.LENGTH_SHORT).show();
+            updateLocationReportDisplay();
         }
         else
             Toast.makeText(this, "All test users already added.", Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void updateLocationReportDisplay() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(
+                "reports/tempUser");
+        databaseReference.setValue(new LocationReport());
+        databaseReference.setValue(null);
     }
 
 }
