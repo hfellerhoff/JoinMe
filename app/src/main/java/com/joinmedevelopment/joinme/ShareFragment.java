@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -90,8 +91,7 @@ public class ShareFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReports = FirebaseDatabase.getInstance().getReference("reports");
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
@@ -134,9 +134,12 @@ public class ShareFragment extends Fragment {
                 updateLocationReport();
             }
         });
-        updateUI();
 
         spinnerWhere = (Spinner) view.findViewById(R.id.spinnerWhere);
+
+        updateUI();
+
+
 
         // Inflate the layout for this fragment
         return view;
@@ -179,9 +182,34 @@ public class ShareFragment extends Fragment {
     private void updateUI() {
         if (locationReportSubmitted) {
             buttonSubmit.setText(R.string.button_check_out);
+
+            databaseReports.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String location = dataSnapshot.getValue(LocationReport.class).getLocation();
+                    String[] locations = getResources().getStringArray(R.array.locations);
+
+                    int i = 0;
+                    for (String arrayLocation : locations) {
+                        if (location.equals(arrayLocation))
+                            spinnerWhere.setSelection(i);
+                        else
+                            i++;
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            spinnerWhere.setEnabled(false);
         }
         else {
             buttonSubmit.setText(R.string.button_check_in);
+            spinnerWhere.setEnabled(true);
         }
     }
 
