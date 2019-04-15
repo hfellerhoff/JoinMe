@@ -20,6 +20,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -116,6 +117,11 @@ public class SearchFragment extends Fragment {
                     if (addReport)
                         reportList.add(report);
                 }
+
+                QuickSort.quickSortLocationReport(reportList);
+
+                // Put reports in chronological order from newest to oldest
+                Collections.reverse(reportList);
 
                 adapter = new LocationReportAdapter(reportList);
                 recyclerView.setAdapter(adapter);

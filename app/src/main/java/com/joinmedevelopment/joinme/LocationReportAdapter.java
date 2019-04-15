@@ -55,6 +55,7 @@ public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAd
 
     @Override
     public void onBindViewHolder(@NonNull final LocationReportViewHolder locationReportViewHolder, final int i) {
+
         LocationReport report = reports.get(i);
         locationReportViewHolder.textViewName.setText(report.getName());
         locationReportViewHolder.textViewLocation.setText(report.getLocation());
