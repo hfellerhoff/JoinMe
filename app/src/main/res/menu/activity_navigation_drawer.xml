@@ -4,17 +4,9 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_menu_profile"
-        android:title="Profile" />
-    <item
-        android:id="@+id/nav_search_preferences"
-        android:icon="@drawable/ic_menu_search_preferences"
-        android:title="Search Preferences" />
-    <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_menu_settings"
-        android:title="Settings" />
+        android:id="@+id/nav_test_app"
+        android:icon="@drawable/ic_menu_test_app"
+        android:title="Test App" />
     <item
         android:id="@+id/nav_sign_out"
         android:icon="@drawable/ic_menu_sign_out"

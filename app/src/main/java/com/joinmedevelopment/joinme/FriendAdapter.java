@@ -117,8 +117,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                         else {
                             f.setFriend(true);
 
-                            friendsMap.put(currentUserID, new Friend(currentUserID, true));
-                            new Friend(f.getId(), true);
+                            new Friend(currentUserID, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), true, f.getId());
+                            new Friend(f.getId(), f.getName(), true, currentUserID);
 
                             databaseReference.setValue(f);
                         }

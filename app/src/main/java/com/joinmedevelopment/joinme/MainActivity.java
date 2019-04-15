@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
@@ -302,13 +302,8 @@ public class MainActivity extends AppCompatActivity implements
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-            Toast.makeText(this, "TODO: Implement Profile", Toast.LENGTH_SHORT).show();
-            userInformation.addFriend("MURJAEHJAnNnYRtH8hAn5UigPPx1", false);
-        } else if (id == R.id.nav_search_preferences) {
-            Toast.makeText(this, "TODO: Implement Search Preferences", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "TODO: Implement Settings", Toast.LENGTH_SHORT).show();
+        if (id == R.id.nav_test_app) {
+            Toast.makeText(this, "TODO: Implement Test", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_sign_out) {
             signOutUser();
         }

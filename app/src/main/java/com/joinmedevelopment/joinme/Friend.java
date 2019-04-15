@@ -29,9 +29,16 @@ public class Friend {
     }
 
     public Friend(String id, boolean isFriend, final String idToAddTo) {
+        this(id,"Placeholder Name", isFriend, idToAddTo);
+
+        retrieveName(idToAddTo);
+    }
+
+    public Friend(String id, String name, boolean isFriend, final String idToAddTo) {
         final String currentUserID = FirebaseAuth.getInstance().getUid();
 
         this.id = id;
+        this.name = name;
         this.isFriend = isFriend;
         idWhoAdded = currentUserID;
 
@@ -41,10 +48,7 @@ public class Friend {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                name = dataSnapshot.child(tempID).getValue(UserInformation.class).getName();
-
                 GenericTypeIndicator<HashMap<String, Friend>> typeIndicator = new GenericTypeIndicator<HashMap<String, Friend>>() {};
-
                 HashMap<String, Friend> friendsMap = dataSnapshot.child(idToAddTo).child("friends").getValue(typeIndicator);
 
                 if (friendsMap == null) {
@@ -76,6 +80,34 @@ public class Friend {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void retrieveName(final String idToAddTo) {
+        final String tempID = id;
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserInformation userInformation = dataSnapshot.child(tempID).getValue(UserInformation.class);
+                name = userInformation.getName();
+
+                GenericTypeIndicator<HashMap<String, Friend>> typeIndicator = new GenericTypeIndicator<HashMap<String, Friend>>() {};
+                HashMap<String, Friend> friendsMap = dataSnapshot.child(idToAddTo).child("friends").getValue(typeIndicator);
+
+                if (friendsMap == null) {
+                    friendsMap = new HashMap<String, Friend>();
+                }
+
+                friendsMap.put(tempID, getFriend());
+                databaseReference.child(idToAddTo).child("friends").setValue(friendsMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void setFriend(boolean friend) {
