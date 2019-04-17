@@ -1,3 +1,4 @@
+//For sorting friends by arrival time
 package com.joinmedevelopment.joinme;
 
 import java.util.ArrayList;

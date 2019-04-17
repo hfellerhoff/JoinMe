@@ -27,6 +27,8 @@ public class UserInformation {
 
     private HashMap<String, Friend> friends;
 
+
+    //constructors
     public UserInformation() {
         this(false, null);
     }
@@ -57,7 +59,7 @@ public class UserInformation {
     }
 
 
-
+    //accessor methods
     public String getUserID() {
         return userID;
     }
@@ -82,6 +84,7 @@ public class UserInformation {
         return reportID;
     }
 
+    //checks user in to specified location
     public void createReport(String reportID) {
         this.reportSubmitted = true;
         this.reportID = reportID;
@@ -89,6 +92,7 @@ public class UserInformation {
         updateUserInformation();
     }
 
+    //checks user out of location
     public void deleteReport() {
         this.reportSubmitted = false;
         this.reportID = null;
@@ -96,11 +100,13 @@ public class UserInformation {
         updateUserInformation();
     }
 
+    //adds friends to user's friend list
     public void addFriend(String friendID, boolean isFriend) {
         friends.put(friendID, new Friend(friendID, isFriend, userID));
         updateUserInformation();
     }
 
+    //updates user profile
     public void updateUserInformation() {
         databaseUsers.child(userID).setValue(this);
     }
