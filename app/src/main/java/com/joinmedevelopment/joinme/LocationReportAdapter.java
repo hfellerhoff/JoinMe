@@ -23,8 +23,8 @@ import java.util.HashMap;
 public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAdapter.LocationReportViewHolder>{
 
     private static ArrayList<LocationReport> reports;
-    // private final OnListFragmentInteractionListener mListener;
 
+    // for RecyclerView of the Location Reports in Search
     public static class LocationReportViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView textViewName;
@@ -33,13 +33,14 @@ public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAd
 
         LocationReportViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.cardView);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewFriendName);
+            cv = (CardView)itemView.findViewById(R.id.cardView);
+            textViewName =  (TextView) itemView.findViewById(R.id.textViewFriendName);
             textViewLocation = (TextView) itemView.findViewById(R.id.textViewLocation);
             textViewTime = (TextView) itemView.findViewById(R.id.textViewTime);
         }
     }
 
+    //constructor
     public LocationReportAdapter(final ArrayList<LocationReport> reports) {
         this.reports = reports;
 
@@ -67,6 +68,7 @@ public class LocationReportAdapter extends RecyclerView.Adapter<LocationReportAd
         return reports.size();
     }
 
+    //returns time passed for time since friends checked in
     public String getTimePassed(long timeCreated) {
         long timePassed = (System.currentTimeMillis() - timeCreated) / 1000;
         String timePassedString = "Just now";

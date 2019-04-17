@@ -13,7 +13,7 @@ public class LocationReport {
     private String userID;
     private long timeCreated;
 
-
+    //constructors
     public LocationReport() {
 
     }
@@ -31,6 +31,8 @@ public class LocationReport {
 
         addReport();
     }
+
+    //accessor methods for locations
 
     public String getUserID() {
         return userID;
@@ -52,6 +54,7 @@ public class LocationReport {
         return timeCreated;
     }
 
+    //creates location report in FireBase
     private void addReport() {
         DatabaseReference databaseReports = FirebaseDatabase.getInstance().getReference("reports");
         databaseReports.child(userID).setValue(this);

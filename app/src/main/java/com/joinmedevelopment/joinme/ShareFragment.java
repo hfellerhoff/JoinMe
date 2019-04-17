@@ -28,22 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ShareFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ShareFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ShareFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -61,19 +50,12 @@ public class ShareFragment extends Fragment {
     public boolean locationReportSubmitted;
     private String locationReportID = "";
 
+    //constructors
     public ShareFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ShareFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ShareFragment newInstance(String param1, String param2) {
         ShareFragment fragment = new ShareFragment();
         Bundle args = new Bundle();
@@ -83,6 +65,7 @@ public class ShareFragment extends Fragment {
         return fragment;
     }
 
+    //create UI for Share
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +103,6 @@ public class ShareFragment extends Fragment {
             });
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -136,15 +118,11 @@ public class ShareFragment extends Fragment {
         });
 
         spinnerWhere = (Spinner) view.findViewById(R.id.spinnerWhere);
-
         updateUI();
-
-
-
-        // Inflate the layout for this fragment
         return view;
     }
 
+    //changes the location of a user
     private void updateLocationReport() {
         if (locationReportSubmitted) {
             deleteLocationReport();
@@ -154,6 +132,7 @@ public class ShareFragment extends Fragment {
         }
     }
 
+    //checks a user into a location
     private void addLocationReport() {
         String name = currentUser.getDisplayName();
         String location = spinnerWhere.getSelectedItem().toString();
@@ -166,6 +145,7 @@ public class ShareFragment extends Fragment {
         updateUI();
     }
 
+    //checks a user out of a location
     public void deleteLocationReport() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -179,6 +159,7 @@ public class ShareFragment extends Fragment {
         updateUI();
     }
 
+    //updates UI when status of location report changes
     private void updateUI() {
         if (locationReportSubmitted) {
             buttonSubmit.setText(R.string.button_check_out);
@@ -215,7 +196,6 @@ public class ShareFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -239,11 +219,12 @@ public class ShareFragment extends Fragment {
         mListener = null;
     }
 
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    //returns true if the user has checked in
     public void setLocationReportSubmitted(boolean locationReportSubmitted) {
         this.locationReportSubmitted = locationReportSubmitted;
     }
