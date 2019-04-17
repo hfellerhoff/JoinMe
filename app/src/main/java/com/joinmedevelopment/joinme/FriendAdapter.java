@@ -56,6 +56,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 it.remove();
             }
         }
+
+        QuickSort.quickSortFriend(friendsList);
     }
 
     @NonNull

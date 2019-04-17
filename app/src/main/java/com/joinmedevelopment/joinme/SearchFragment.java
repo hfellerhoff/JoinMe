@@ -20,6 +20,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -43,6 +44,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private boolean sortByFriends = true;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -108,14 +111,27 @@ public class SearchFragment extends Fragment {
 
                     boolean addReport = false;
 
-                    for (Friend friend : friendsMap.values()) {
-                        if (friend.isFriend() && friend.getId().equals(report.getUserID()))
-                            addReport = true;
+                    if (sortByFriends) {
+                        for (Friend friend : friendsMap.values()) {
+                            if (friend.isFriend() && friend.getId().equals(report.getUserID()))
+                                addReport = true;
+                        }
                     }
+                    else if (report.getUserID() != null)
+                        if (report.getUserID().equals(FirebaseAuth.getInstance().getUid()))
+                            addReport = false;
+                    else
+                        addReport = true;
+
 
                     if (addReport)
                         reportList.add(report);
                 }
+
+                QuickSort.quickSortLocationReport(reportList);
+
+                // Put reports in chronological order from newest to oldest
+                Collections.reverse(reportList);
 
                 adapter = new LocationReportAdapter(reportList);
                 recyclerView.setAdapter(adapter);
@@ -160,5 +176,11 @@ public class SearchFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(LocationReport locationReport);
+    }
+
+    public Boolean isSortByFriends() {return sortByFriends;}
+
+    public void setSortByFriends(boolean sortByFriends) {
+        this.sortByFriends = sortByFriends;
     }
 }
