@@ -3,10 +3,10 @@ An android app prototype of an app called JoinMe, which connects friends and cre
 JoinMe is an Android app which allows users to connect with and meet up with friends at various locations around campus. The app creates a platform for users to share their location and invite friends to join them, enabling more face-to-face interaction with friends and breaking down the barriers of informally hanging out. The app has a friends function, which makes it easier for the user to find specific people to hang out, rather than being exposed to the entire Loyola population. The app removes the hassle of texting and contacting a number of friends just for a brief hang out, and instead makes it quick and easy to meet up with friends and classmates.
 
 # Participants
-Henry Fellerhoff
-Anne Wagner
-Yilin Guan
-Amad Farooq
+Henry Fellerhoff <br>
+Anne Wagner <br>
+Yilin Guan <br>
+Amad Farooq <br>
 
 # Roles
 We used the GitHub project tab (similar to Trello) to assign development steps on an individual task basis. Each team member was involved in some way about the app research and development so that everyone could have a complete understanding of the app creation.
