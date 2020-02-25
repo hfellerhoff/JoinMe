@@ -1,4 +1,9 @@
-# JoinMe
+<p align='center'>
+    <img src='JoinMeProjectSquare.png' height='300' width='300' />
+</p>
+<h1 align='center'>
+    JoinMe – Android App Prototype
+</h1>
 An android app prototype of an app called JoinMe, which connects friends and creates a seamless way to meet up informally.
 JoinMe is an Android app which allows users to connect with and meet up with friends at various locations around campus. The app creates a platform for users to share their location and invite friends to join them, enabling more face-to-face interaction with friends and breaking down the barriers of informally hanging out. The app has a friends function, which makes it easier for the user to find specific people to hang out, rather than being exposed to the entire Loyola population. The app removes the hassle of texting and contacting a number of friends just for a brief hang out, and instead makes it quick and easy to meet up with friends and classmates.
 
